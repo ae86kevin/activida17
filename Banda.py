@@ -24,17 +24,59 @@ class Bandas:
                 archivo.write(f"{nombreBanda}:{dato['Categoria']}: {dato['Institucion']}\n")
 
 
-class ParticipantesBandas:
-    def __init__(self,nombreBanda,institucion):
-        self.nombreBanda = nombreBanda
-        self.institucion = institucion
 
-    def mostrarInformacion(self):
-        return f"Nombre: {self.nombreBanda},{self.institucion} "
+    def inscribirBanda(self,nombre, institucion,categoria):
+        if nombre in self.bandas:
+            print("\nBanda ya esta registrada")
+        else:
+            categoria =categoria.lower()
+            if categoria in  ["primaria", "basico","diversificado"]:
+                self.bandas[nombre] = {
+                    "institucion": institucion,
+                    "categoria": categoria,
+                    "puntajes":{}
+                }
+                self.guardar_bandas()
+                print("Banda registrada exitosamente")
+            else:
+                print("Banda no registrada")
 
-class BandaEscolar(ParticipantesBandas):
-    categoria=["primaria","basico","diversifcado"]
-    categoria2=["ritmo", "uniformidad","coregradia","puntalida"]
+    def evalucion(self,nombre,puntajes):
+        if nombre not in self.bandas:
+            print("\nBanda no registrada")
+            return
 
-    def __init__(self,nombreBanda,institucion,categoria):
-        super().__init__(nombreBanda,institucion)
+        evaluacionP= ["ritmo", "uniformidad", "coreografía", "alineación", "puntualidad"]
+
+
+        calificacion = 0
+
+        for var in evaluacionP:
+            if var in puntajes:
+                valor=puntajes[var]
+                if valor >= 0:
+                    if valor <= 10:
+                        calificacion=calificacion+1
+                    else:
+                        print("\nPuntaje mayor a 10 en: ",var)
+
+                else:
+                    print("puntaje mayor a 10 en", var)
+                    return
+            else:
+                print("puntaje mayor a  0 en", var)
+                return
+        else:
+            print("informaion faltnate ")
+            return
+
+        if calificacion ==5:
+            self.bandas[nombre]["puntualidad"]=calificacion
+            print("registadoa")
+
+
+
+
+
+
+
